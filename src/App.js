@@ -5,6 +5,7 @@ import { Navigate } from "react-router-dom";
 // import { Outlet } from "react-router-dom";
 // import ProductsList from "./components/ProductsList/ProductsList";
 // import shoppingList from "./components/shoppingList/shoppingList";
+import Dashboard from "../../react2223/src/components/Dashboard/Dashboard";
 
 function App(props) {
   const userExist = localStorage.getItem("user");
@@ -15,6 +16,7 @@ function App(props) {
     <div className={styles.appWrapper}>
       <Header />
       <ProductsFilters />
+      <Dashboard />
       {/* <Outlet /> */}
     </div>
   );
