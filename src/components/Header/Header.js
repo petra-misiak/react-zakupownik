@@ -3,15 +3,18 @@ import styles from "../../common/styles/Headers.module.scss";
 import { Link } from "react-router-dom";
 import { Typography, Button } from "@mui/material";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   loadProducts,
   setProductsLoadingState,
   setErrorFromAPI,
+  loadShoppingList,
+  filterProducts,
 } from "../../redux/productsSlice";
 
 function Header(props) {
   const currentUser = JSON.parse(window.localStorage.getItem("user"));
+  const filters = useSelector((state) => state.products.filters);
   const dispatch = useDispatch();
 
   const getProductsFromApi = async (sufix) => {
@@ -21,9 +24,15 @@ function Header(props) {
       dispatch(loadProducts(response.data));
       console.log(response.data);
       dispatch(setProductsLoadingState("success"));
+      dispatch(filterProducts(filters));
+      const allShoppingList = await axios.get(
+        `http://localhost:9000/products/shoppingList`
+      );
+      dispatch(loadShoppingList(allShoppingList.data));
     } catch (e) {
       dispatch(setErrorFromAPI(e.response.data.error));
-      dispatch(setProductsLoadingState("error"));
+      dispatch(setProductsLoadingState("error loading products"));
+      console.log(e);
     }
   };
 
